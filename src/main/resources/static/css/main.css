@@ -1,0 +1,13 @@
+.main-content {
+    margin-top: 60px;
+}
+
+.grid {
+    width: 1200px;
+    height: 600px;
+}
+
+/* AngularJS */
+[ng\:cloak], [ng-cloak], [data-ng-cloak], [x-ng-cloak], .ng-cloak, .x-ng-cloak {
+    display: none;
+}

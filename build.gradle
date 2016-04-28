@@ -1,0 +1,74 @@
+group 'com.github.lavenderx'
+version '1.0-SNAPSHOT'
+
+apply plugin: 'java'
+apply plugin: 'idea'
+apply plugin: 'checkstyle'
+apply plugin: 'spring-boot'
+
+buildscript {
+    repositories {
+        jcenter()
+    }
+
+    dependencies {
+        classpath 'org.springframework.boot:spring-boot-gradle-plugin:1.3.3.RELEASE'
+        classpath 'org.springframework:springloaded:1.2.6.RELEASE'
+    }
+}
+
+idea {
+    module {
+        inheritOutputDirs = false
+        outputDir = file("$buildDir/classes/main/")
+    }
+}
+
+checkstyle {
+    toolVersion = '6.17'
+    ignoreFailures = true
+    configFile = file("${rootDir}/google_checks.xml")
+}
+
+sourceCompatibility = 1.8
+targetCompatibility = 1.8
+
+compileJava.options.encoding = 'UTF-8'
+compileTestJava.options.encoding = 'UTF-8'
+
+bootRepackage {
+    mainClass = 'com.github.lavenderx.ApplicationBoot'
+}
+
+configurations {
+    all*.exclude group: 'commons-logging', module: 'commons-logging'
+    compile.exclude module: 'spring-boot-starter-tomcat'
+}
+
+repositories {
+    mavenLocal()
+    mavenCentral()
+    jcenter()
+}
+
+ext {
+    springbootVersion = '1.3.3.RELEASE'
+}
+
+dependencies {
+    compile 'ch.qos.logback:logback-classic:1.1.7'
+    compile "org.springframework.boot:spring-boot-starter-web:$springbootVersion"
+    compile "org.springframework.boot:spring-boot-starter-undertow:$springbootVersion"
+//    compile "org.springframework.boot:spring-boot-starter-security:$springbootVersion"
+    compile "org.springframework.boot:spring-boot-starter-mustache:$springbootVersion"
+    compile 'org.webjars:webjars-locator:0.31'
+    compile 'org.webjars:requirejs:2.2.0'
+    compile 'org.webjars:jquery:1.12.3' // for bootstrap
+    compile('org.webjars:angularjs:1.5.5') {
+        exclude group: 'org.webjars', module: 'jquery'
+    }
+    compile('org.webjars:angular-ui-bootstrap:1.3.2') {
+        exclude group: 'org.webjars', module: 'jquery'
+    }
+    compile 'org.webjars:ui-grid:3.1.1'
+}

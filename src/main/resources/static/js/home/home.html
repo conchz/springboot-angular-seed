@@ -1,0 +1,19 @@
+<div class="form-inline">
+    <div class="form-group">
+        <input type="text" class="form-control" style="width: 500px; height: 45px"
+               ng-model="queryString" ng-keyup="$event.keyCode == 13 && search()">
+    </div>
+    <button id="searchButton" type="submit" class="btn btn-success btn-lg" ng-click="search()">搜索</button>
+    <br>
+    <span><h4 ng-bind="blacklistHitsDesc"></h4></span>
+</div>
+<br>
+
+<div id="blacklistGrid" ui-grid="gridOptions" ui-grid-pagination ui-grid-selection class="grid"></div>
+<p>当前页: {{ gridApi.pagination.getPage() }} of {{ gridApi.pagination.getTotalPages() }}</p>
+<button type="button" class="btn btn-success" ng-click="gridApi.pagination.previousPage()">
+    上一页
+</button>
+<button type="button" class="btn btn-success" ng-click="gridApi.pagination.nextPage()">
+    下一页
+</button>
