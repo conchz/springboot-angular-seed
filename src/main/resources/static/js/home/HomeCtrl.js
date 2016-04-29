@@ -6,7 +6,7 @@ define([], function () {
      */
     var HomeCtrl = function ($scope, $rootScope, $http, $uibModal, $location, helper) {
         console.log(helper.sayHi());
-        $rootScope.pageTitle = '点融网';
+        $rootScope.pageTitle = 'springboot-angular-seed';
 
         $scope.queryString = "";
         $scope.blacklistHitsDesc = "";
