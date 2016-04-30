@@ -1,5 +1,6 @@
 package com.github.lavenderx.controller;
 
+import org.springframework.context.annotation.Scope;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -15,10 +16,10 @@ import javax.servlet.http.HttpServletRequest;
  * Created by lavenderx on 2016-04-28.
  */
 @RestController
+@Scope("prototype")
 public class WebJarsController {
 
     private final WebJarAssetLocator assetsLocator = new WebJarAssetLocator();
-
 
     @RequestMapping("/lib/{webjar}/**")
     public ResponseEntity<Object> locateWebjarAsset(

@@ -16,6 +16,6 @@ public class ResourceUrlProviderController {
 
     @ModelAttribute("urls")
     public ResourceUrlProvider urls() {
-        return this.resourceUrlProvider;
+        return resourceUrlProvider;
     }
 }

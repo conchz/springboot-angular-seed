@@ -41,9 +41,15 @@ bootRepackage {
     mainClass = 'com.github.lavenderx.ApplicationBoot'
 }
 
+bootRun {
+    // ex: gradle bootRun -PjvmArgs="-Dspring.profiles.active=dev"
+    if (project.hasProperty('jvmArgs')) {
+        jvmArgs = project.jvmArgs.split("\\s+") as List
+    }
+}
+
 configurations {
     all*.exclude group: 'commons-logging', module: 'commons-logging'
-    compile.exclude module: 'spring-boot-starter-tomcat'
 }
 
 repositories {
@@ -58,10 +64,16 @@ ext {
 
 dependencies {
     compile 'ch.qos.logback:logback-classic:1.1.7'
-    compile "org.springframework.boot:spring-boot-starter-web:$springbootVersion"
+    compile("org.springframework.boot:spring-boot-starter-web:$springbootVersion") {
+        exclude group: 'org.springframework.boot', module: 'spring-boot-starter-tomcat'
+    }
     compile "org.springframework.boot:spring-boot-starter-undertow:$springbootVersion"
     compile "org.springframework.boot:spring-boot-starter-security:$springbootVersion"
     compile "org.springframework.boot:spring-boot-starter-mustache:$springbootVersion"
+    compile "org.springframework.boot:spring-boot-starter-amqp:$springbootVersion"
+    compile "org.springframework.boot:spring-boot-devtools:$springbootVersion"
+
+    // Webjars dependencies
     compile 'org.webjars:webjars-locator:0.31'
     compile 'org.webjars:requirejs:2.2.0'
     compile 'org.webjars:jquery:1.12.3' // for bootstrap
@@ -72,4 +84,6 @@ dependencies {
         exclude group: 'org.webjars', module: 'jquery'
     }
     compile 'org.webjars:ui-grid:3.1.1'
+
+    testCompile "org.springframework.boot:spring-boot-starter-test:$springbootVersion"
 }

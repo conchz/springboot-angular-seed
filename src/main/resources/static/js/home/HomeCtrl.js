@@ -46,7 +46,7 @@ define([], function () {
             if ($scope.queryString.trim().length == 0) {
                 return;
             }
-            var queryUrl = "/blacklist/query?q=" + $scope.queryString;
+            var queryUrl = "" + $scope.queryString;
             $http.get(queryUrl)
                 .success(function (response, status, headers, config) {
                     $scope.gridOptions.data = JSON.parse(response.data);
