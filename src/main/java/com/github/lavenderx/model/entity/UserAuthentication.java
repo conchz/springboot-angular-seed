@@ -1,5 +1,7 @@
 package com.github.lavenderx.model.entity;
 
+import org.apache.commons.lang3.builder.ToStringBuilder;
+
 import java.util.List;
 
 /**
@@ -35,5 +37,10 @@ public class UserAuthentication {
 
     public void setRoleList(List<String> roleList) {
         this.roleList = roleList;
+    }
+
+    @Override
+    public String toString() {
+        return ToStringBuilder.reflectionToString(this);
     }
 }
