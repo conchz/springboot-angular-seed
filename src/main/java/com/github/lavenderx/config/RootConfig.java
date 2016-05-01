@@ -1,6 +1,7 @@
 package com.github.lavenderx.config;
 
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.context.support.PropertySourcesPlaceholderConfigurer;
@@ -11,7 +12,11 @@ import org.springframework.core.annotation.Order;
  */
 @Order(0)
 @Configuration
-@PropertySource({
+@ComponentScan(basePackages = {
+        "com.github.lavenderx.model.dao",
+        "com.github.lavenderx.service"
+})
+@PropertySource(value = {
         "classpath:common-config.properties",
         "classpath:${spring.profiles.active}.properties"
 })

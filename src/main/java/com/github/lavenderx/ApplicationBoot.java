@@ -2,6 +2,7 @@ package com.github.lavenderx;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.context.annotation.ComponentScan;
 import org.springframework.util.StringUtils;
 
 /**
@@ -10,6 +11,7 @@ import org.springframework.util.StringUtils;
  * <a href="http://blog.csdn.net/catoop/article/details/50501706"></a>
  * Created by lavenderx on 2016-04-28.
  */
+@ComponentScan("com.github.lavenderx.config")
 @SpringBootApplication
 public class ApplicationBoot {
     private static final String PROFILE = "spring.profiles.active";
