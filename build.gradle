@@ -16,6 +16,7 @@ apply plugin: 'java'
 apply plugin: 'idea'
 apply plugin: 'checkstyle'
 apply plugin: 'spring-boot'
+apply plugin: 'application'
 apply plugin: 'com.bmuschko.docker-java-application'
 
 sourceCompatibility = 1.8
@@ -32,6 +33,7 @@ ext {
     springbootVersion = '1.3.3.RELEASE'
 
     appVersion = version.toString().replaceAll("-(?i)SNAPSHOT", "")
+    appMainClassName = 'com.github.lavenderx.ApplicationBoot'
     serverPort = "server.port"
 
     def props = new Properties()
@@ -60,7 +62,7 @@ checkstyle {
 }
 
 bootRepackage {
-    mainClass = 'com.github.lavenderx.ApplicationBoot'
+    mainClass = "$appMainClassName"
 }
 
 bootRun {
@@ -110,4 +112,28 @@ dependencies {
     compile 'org.webjars:ui-grid:3.1.1'
 
     testCompile "org.springframework.boot:spring-boot-starter-test:$springbootVersion"
+}
+
+// Package sources into a executable binary distribution zip file
+
+mainClassName = "$appMainClassName"
+
+applicationDefaultJvmArgs = [
+        "-Xms1g",
+        "-Xmx1g",
+        "-Dfile.encoding=UTF-8"
+]
+
+task copyLicense {
+    outputs.file new File("$buildDir/LICENSE")
+    doLast {
+        copy {
+            from "LICENSE"
+            into "$buildDir"
+        }
+    }
+}
+
+applicationDistribution.from(copyLicense) {
+    into ""
 }

@@ -4,7 +4,7 @@
 <configuration scan="true" scanPeriod="60 seconds">
 
     <appender name="FILE" class="ch.qos.logback.core.FileAppender">
-        <file>./logs/application.log</file>
+        <file>${application.home:-..}/logs/application.log</file>
         <encoder>
             <charset>UTF-8</charset>
             <pattern>%date [%level] from %logger in %thread - %message%n%xException</pattern>

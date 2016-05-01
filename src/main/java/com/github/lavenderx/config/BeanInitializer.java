@@ -50,11 +50,15 @@ public class BeanInitializer {
                                             HttpServletResponse response,
                                             FilterChain filterChain)
                     throws ServletException, IOException {
-                if (!request.getRequestURI().endsWith(".html")
-                        || (request.getHeader("x-requested-with") != null
-                        && request.getHeader("x-requested-with").equalsIgnoreCase("XMLHttpRequest"))) {
-                    filterChain.doFilter(request, response);
+                if (request.getRequestURI().endsWith(".html")) {
+                    if (request.getHeader("X-Requested-With") != null
+                            && request.getHeader("X-Requested-With").equalsIgnoreCase("XMLHttpRequest")) {
+                        filterChain.doFilter(request, response);
+                    }
+                    return;
                 }
+
+                filterChain.doFilter(request, response);
             }
         };
     }
