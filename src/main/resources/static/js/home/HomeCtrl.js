@@ -1,9 +1,6 @@
 define([], function () {
     'use strict';
 
-    /**
-     * Controls the index page
-     */
     var HomeCtrl = function ($scope, $rootScope, $http, $uibModal, $location, helper) {
         console.log(helper.sayHi());
         $rootScope.pageTitle = 'springboot-angular-seed';
