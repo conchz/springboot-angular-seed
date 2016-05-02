@@ -12,8 +12,9 @@ buildscript {
     }
 }
 
-apply plugin: 'java'
 apply plugin: 'idea'
+apply plugin: 'java'
+apply plugin: 'groovy'
 apply plugin: 'checkstyle'
 apply plugin: 'spring-boot'
 apply plugin: 'application'
@@ -25,19 +26,36 @@ targetCompatibility = 1.8
 compileJava.options.encoding = 'UTF-8'
 compileTestJava.options.encoding = 'UTF-8'
 
+mainClassName = 'com.github.lavenderx.ApplicationBoot'
+
 configurations {
     all*.exclude group: 'commons-logging', module: 'commons-logging'
+}
+
+sourceSets {
+    main {
+        java {
+            srcDirs = ['src/main/java']
+        }
+
+        groovy {
+            srcDirs = ['src/main/java', 'src/main/groovy']
+        }
+
+        resources {
+            srcDirs = ['src/main/resources']
+        }
+    }
 }
 
 ext {
     springbootVersion = '1.3.3.RELEASE'
 
     appVersion = version.toString().replaceAll("-(?i)SNAPSHOT", "")
-    appMainClassName = 'com.github.lavenderx.ApplicationBoot'
-    serverPort = "server.port"
+    serverPort = 'server.port'
 
     def props = new Properties()
-    file("src/main/resources/common-config.properties").withInputStream {
+    file('src/main/resources/common-config.properties').withInputStream {
         props.load(it)
     }
     props.each {
@@ -47,22 +65,10 @@ ext {
     }
 }
 
-idea {
-    module {
-        inheritOutputDirs = false
-        outputDir = file("$buildDir/classes/main/")
-        testOutputDir = file("$buildDir/classes/test/")
-    }
-}
-
 checkstyle {
     toolVersion = '6.17'
     ignoreFailures = true
     configFile = file("${rootDir}/google_checks.xml")
-}
-
-bootRepackage {
-    mainClass = "$appMainClassName"
 }
 
 bootRun {
@@ -70,6 +76,8 @@ bootRun {
     if (project.hasProperty('jvmArgs')) {
         jvmArgs = project.jvmArgs.split("\\s+") as List
     }
+
+    addResources = true
 }
 
 docker {
@@ -89,6 +97,7 @@ repositories {
 
 dependencies {
     compile 'ch.qos.logback:logback-classic:1.1.7'
+    compile 'org.codehaus.groovy:groovy-all:2.4.6'
     compile("org.springframework.boot:spring-boot-starter-web:$springbootVersion") {
         exclude group: 'org.springframework.boot', module: 'spring-boot-starter-tomcat'
     }
@@ -116,19 +125,17 @@ dependencies {
 
 // Package sources into a executable binary distribution zip file
 
-mainClassName = "$appMainClassName"
-
 applicationDefaultJvmArgs = [
-        "-Xms1g",
-        "-Xmx1g",
-        "-Dfile.encoding=UTF-8"
+        '-Xms1g',
+        '-Xmx1g',
+        '-Dfile.encoding=UTF-8'
 ]
 
 task copyLicense {
     outputs.file new File("$buildDir/LICENSE")
     doLast {
         copy {
-            from "LICENSE"
+            from 'LICENSE'
             into "$buildDir"
         }
     }
