@@ -39,7 +39,7 @@ sourceSets {
         }
 
         groovy {
-            srcDirs = ['src/main/java', 'src/main/groovy']
+            srcDirs = ['src/main/groovy']
         }
 
         resources {

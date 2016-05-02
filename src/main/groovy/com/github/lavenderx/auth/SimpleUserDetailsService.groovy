@@ -1,7 +1,7 @@
 package com.github.lavenderx.auth
 
-import com.github.lavenderx.model.entity.UserAuthentication
 import com.google.common.collect.Lists
+import com.github.lavenderx.model.entity.UserAuthentication
 import org.springframework.security.core.GrantedAuthority
 import org.springframework.security.core.authority.SimpleGrantedAuthority
 import org.springframework.security.core.userdetails.User

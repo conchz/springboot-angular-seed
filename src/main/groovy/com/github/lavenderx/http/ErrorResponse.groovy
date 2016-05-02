@@ -9,7 +9,7 @@ class ErrorResponse extends BaseResponse {
     }
 
     ErrorResponse(String status, String message) {
-        super.setStatus(status)
-        super.setMessage(message)
+        Object.setStatus(status)
+        Object.setMessage(message)
     }
 }
