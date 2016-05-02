@@ -1,0 +1,7 @@
+#!/usr/bin/env bash
+
+# Project root directory
+base_dir=$(pwd)
+
+# Package sources into a executable binary distribution zip file
+gradle clean distZip
