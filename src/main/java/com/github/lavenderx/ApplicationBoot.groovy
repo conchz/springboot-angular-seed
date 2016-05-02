@@ -16,7 +16,7 @@ import org.springframework.util.StringUtils
 @SpringBootApplication
 class ApplicationBoot {
 
-    static final String PROFILE = 'spring.profiles.active'
+    private static final String PROFILE = 'spring.profiles.active'
 
     static main(args) {
         if (StringUtils.isEmpty(System.getProperty(PROFILE))) {

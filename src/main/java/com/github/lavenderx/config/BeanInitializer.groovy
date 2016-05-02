@@ -28,8 +28,9 @@ class BeanInitializer {
             @Override
             void customize(ConfigurableEmbeddedServletContainer container) {
                 ErrorPage error401Page = new ErrorPage(HttpStatus.UNAUTHORIZED, '/views/401.html')
+                ErrorPage error404Page = new ErrorPage(HttpStatus.NOT_FOUND, '/views/404.html')
 
-                container.addErrorPages(error401Page)
+                container.addErrorPages(error401Page, error404Page)
             }
         }
     }
