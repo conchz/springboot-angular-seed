@@ -2,21 +2,17 @@ package com.github.lavenderx.config;
 
 import com.github.lavenderx.annotation.AmqpRpcService;
 import com.google.common.base.CaseFormat;
-import com.rabbitmq.client.Channel;
 import org.reflections.Reflections;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.amqp.core.Binding;
 import org.springframework.amqp.core.BindingBuilder;
 import org.springframework.amqp.core.DirectExchange;
-import org.springframework.amqp.core.Message;
 import org.springframework.amqp.core.Queue;
 import org.springframework.amqp.rabbit.connection.CachingConnectionFactory;
 import org.springframework.amqp.rabbit.connection.ConnectionFactory;
 import org.springframework.amqp.rabbit.core.RabbitAdmin;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
-import org.springframework.amqp.rabbit.listener.SimpleMessageListenerContainer;
-import org.springframework.amqp.rabbit.listener.adapter.AbstractAdaptableMessageListener;
 import org.springframework.amqp.remoting.client.AmqpProxyFactoryBean;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.BeanInitializationException;
@@ -85,7 +81,6 @@ public class RabbitmqConfig implements BeanFactoryPostProcessor {
     @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
     public RabbitTemplate rabbitTemplate() {
         RabbitTemplate template = new RabbitTemplate(connectionFactory());
-        template.setEncoding("UTF-8");
         template.setExchange(exchange);
         template.setReplyTimeout(replyTimeout);
 
@@ -133,27 +128,6 @@ public class RabbitmqConfig implements BeanFactoryPostProcessor {
 
         return connectionFactory;
     }
-
-//    @Bean
-//    public SimpleMessageListenerContainer messageContainer() {
-//        SimpleMessageListenerContainer container =
-//                new SimpleMessageListenerContainer(connectionFactory());
-//        container.setQueues(queue());
-//        container.setExposeListenerChannel(true);
-//        container.setMaxConcurrentConsumers(16);
-//        container.setConcurrentConsumers(4);
-//        container.setMessageListener(new AbstractAdaptableMessageListener() {
-//            @Override
-//            public void onMessage(Message message, Channel channel) throws Exception {
-//                byte[] body = message.getBody();
-//                LOGGER.info("Received message: {}", new String(body));
-//                // 确认消息成功消费
-//                channel.basicAck(message.getMessageProperties().getDeliveryTag(), false);
-//            }
-//        });
-//
-//        return container;
-//    }
 
     @Override
     public void postProcessBeanFactory(ConfigurableListableBeanFactory beanFactory)
