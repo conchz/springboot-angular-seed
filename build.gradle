@@ -80,6 +80,8 @@ repositories {
 
 dependencies {
     compile 'ch.qos.logback:logback-classic:1.1.7'
+    compile 'com.google.guava:guava:19.0'
+    compile 'org.reflections:reflections:0.9.10'
     compile("org.springframework.boot:spring-boot-starter-web:$springbootVersion") {
         exclude group: 'org.springframework.boot', module: 'spring-boot-starter-tomcat'
     }
@@ -88,7 +90,6 @@ dependencies {
     compile "org.springframework.boot:spring-boot-starter-mustache:$springbootVersion"
     compile "org.springframework.boot:spring-boot-starter-amqp:$springbootVersion"
     compile "org.springframework.boot:spring-boot-devtools:$springbootVersion"
-    compile 'com.google.guava:guava:19.0'
 
     // Webjars dependencies
     compile 'org.webjars:webjars-locator:0.31'
