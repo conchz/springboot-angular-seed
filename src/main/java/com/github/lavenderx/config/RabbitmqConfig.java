@@ -20,6 +20,7 @@ import org.springframework.beans.factory.config.BeanFactoryPostProcessor;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.beans.factory.config.ConfigurableListableBeanFactory;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Scope;
 
@@ -32,28 +33,21 @@ import java.util.Properties;
  * </p>
  * Created by lavenderx on 2016-05-03.
  */
+@ComponentScan("com.github.lavenderx.mq")
 @Configuration
 public class RabbitmqConfig implements BeanFactoryPostProcessor {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(RabbitmqConfig.class);
     private static final String SCAN_PACKAGE = "com.github.lavenderx.common";
 
-    private static final String DEFAULT_EXCHANGE = "spring-boot-exchange";
-    private static final String DEFAULT_ROUTINGKEY = "spring-boot-routingKey";
-    private static final String DEFAULT_QUEUE = "spring-boot-queue";
-
     private final String host;
-
     private final int port;
-
     private final String vhost;
-
     private final String exchange;
-
     private final String username;
-
     private final String password;
-
+    private final String routingKey;
+    private final String queue;
     private final long replyTimeout;
 
     public RabbitmqConfig() {
@@ -71,6 +65,8 @@ public class RabbitmqConfig implements BeanFactoryPostProcessor {
             this.exchange = props.getProperty("amqp.exchange");
             this.username = props.getProperty("amqp.username");
             this.password = props.getProperty("amqp.password");
+            this.routingKey = props.getProperty("amqp.routingKey");
+            this.queue = props.getProperty("amqp.queue");
             this.replyTimeout = Long.valueOf(props.getProperty("amqp.reply.timeout"));
         } catch (IOException ex) {
             throw new RuntimeException("Failed to read AMQP config file");
@@ -104,13 +100,13 @@ public class RabbitmqConfig implements BeanFactoryPostProcessor {
 
     @Bean
     public Queue queue() {
-        return new Queue(DEFAULT_QUEUE, true);    // 队列持久
+        return new Queue(queue, true);    // 队列持久
 
     }
 
     @Bean
     public Binding binding() {
-        return BindingBuilder.bind(queue()).to(exchange()).with(DEFAULT_ROUTINGKEY);
+        return BindingBuilder.bind(queue()).to(exchange()).with(routingKey);
     }
 
     @Bean
