@@ -1,0 +1,32 @@
+package com.github.lavenderx.config
+
+import groovy.transform.TypeChecked
+import org.springframework.context.annotation.ComponentScan
+import org.springframework.context.annotation.Configuration
+import org.springframework.context.annotation.Import
+import org.springframework.web.servlet.config.annotation.EnableWebMvc
+import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry
+import org.springframework.web.servlet.config.annotation.ViewControllerRegistry
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter
+
+/**
+ * Created by lavenderx on 2016-05-05.
+ */
+@Configuration
+@ComponentScan('com.github.lavenderx.controller')
+@EnableWebMvc
+@Import(RootConfig.class)
+@TypeChecked
+class WebConfig extends WebMvcConfigurerAdapter {
+
+    @Override
+    void addResourceHandlers(ResourceHandlerRegistry registry) {
+        registry.addResourceHandler('/favicon.ico', '/static/**', '/**')
+                .addResourceLocations('classpath:/static/')
+    }
+
+    @Override
+    void addViewControllers(ViewControllerRegistry registry) {
+        registry.addViewController('/').setViewName('index')
+    }
+}

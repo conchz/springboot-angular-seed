@@ -13,7 +13,7 @@ buildscript {
 }
 
 apply plugin: 'idea'
-apply plugin: 'java'
+apply plugin: 'groovy'
 apply plugin: 'checkstyle'
 apply plugin: 'spring-boot'
 apply plugin: 'application'
@@ -29,6 +29,18 @@ mainClassName = 'com.github.lavenderx.ApplicationBoot'
 
 configurations {
     all*.exclude group: 'commons-logging', module: 'commons-logging'
+}
+
+sourceSets {
+    main {
+        groovy {
+            srcDirs = ['src/main/groovy']
+        }
+
+        resources {
+            srcDirs = ['src/main/resources']
+        }
+    }
 }
 
 ext {
@@ -81,6 +93,7 @@ repositories {
 dependencies {
     compile 'ch.qos.logback:logback-classic:1.1.7'
     compile 'com.google.guava:guava:19.0'
+    compile 'org.codehaus.groovy:groovy-all:2.4.6'
     compile 'org.reflections:reflections:0.9.10'
     compile("org.springframework.boot:spring-boot-starter-web:$springbootVersion") {
         exclude group: 'org.springframework.boot', module: 'spring-boot-starter-tomcat'
