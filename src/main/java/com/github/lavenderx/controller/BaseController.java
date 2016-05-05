@@ -10,7 +10,6 @@ import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.bind.annotation.ResponseStatus;
 
 /**
  * Created by lavenderx on 2016-05-02.
@@ -30,13 +29,12 @@ public class BaseController {
 
     @ExceptionHandler(Exception.class)
     @ResponseBody
-    @ResponseStatus
-    public ResponseEntity<? super BaseResponse> handleException(Exception ex) throws Exception {
+    protected ResponseEntity<? super BaseResponse> handleException(Exception ex) {
         ErrorResponse errorResponse = new ErrorResponse(
                 String.valueOf(HttpStatus.INTERNAL_SERVER_ERROR.value()),
                 ex.getMessage()
         );
 
-        return new ResponseEntity<BaseResponse>(errorResponse, HttpStatus.INTERNAL_SERVER_ERROR);
+        return new ResponseEntity<>(errorResponse, HttpStatus.INTERNAL_SERVER_ERROR);
     }
 }
