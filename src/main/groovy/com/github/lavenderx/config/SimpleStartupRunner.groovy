@@ -15,7 +15,7 @@ import org.springframework.stereotype.Component
 @TypeChecked
 class SimpleStartupRunner implements CommandLineRunner {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(SimpleStartupRunner.class)
+    static final Logger LOGGER = LoggerFactory.getLogger(SimpleStartupRunner.class)
 
     @Override
     void run(String... strings) throws Exception {

@@ -16,15 +16,15 @@ import org.springframework.stereotype.Component
 @TypeChecked
 class Producer implements RabbitTemplate.ConfirmCallback {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(Producer.class)
+    static final Logger LOGGER = LoggerFactory.getLogger(Producer.class)
 
-    private RabbitTemplate rabbitTemplate
+    RabbitTemplate rabbitTemplate
 
     @Value('${amqp.exchange}')
-    private String exchange
+    String exchange
 
     @Value('${amqp.routingKey}')
-    private String routingKey
+    String routingKey
 
     @Autowired
     void setRabbitTemplate(RabbitTemplate rabbitTemplate) {
@@ -42,7 +42,7 @@ class Producer implements RabbitTemplate.ConfirmCallback {
         }
     }
 
-    public void sendMessage(String content) {
+    void sendMessage(String content) {
         CorrelationData correlationId = new CorrelationData(UUID.randomUUID().toString())
         rabbitTemplate.convertAndSend(exchange, routingKey, content, correlationId)
     }

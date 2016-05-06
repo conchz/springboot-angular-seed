@@ -34,12 +34,12 @@ import javax.servlet.http.HttpServletResponse
 class RootConfig {
 
     @Bean
-    public static PropertySourcesPlaceholderConfigurer placeholderConfigurer() {
+    static PropertySourcesPlaceholderConfigurer placeholderConfigurer() {
         new PropertySourcesPlaceholderConfigurer()
     }
 
     @Bean
-    public EmbeddedServletContainerCustomizer containerCustomizer() {
+    EmbeddedServletContainerCustomizer containerCustomizer() {
         new EmbeddedServletContainerCustomizer() {
             @Override
             void customize(ConfigurableEmbeddedServletContainer container) {
@@ -52,7 +52,7 @@ class RootConfig {
     }
 
     @Bean
-    public CharacterEncodingFilter characterEncodingFilter() {
+    CharacterEncodingFilter characterEncodingFilter() {
         CharacterEncodingFilter characterEncodingFilter = new CharacterEncodingFilter()
         characterEncodingFilter.setEncoding('UTF-8')
         characterEncodingFilter.setForceEncoding(true)
@@ -61,7 +61,7 @@ class RootConfig {
     }
 
     @Bean
-    public OncePerRequestFilter staticResourcesFilter() {
+    OncePerRequestFilter staticResourcesFilter() {
         new OncePerRequestFilter() {
             @Override
             protected void doFilterInternal(HttpServletRequest request,

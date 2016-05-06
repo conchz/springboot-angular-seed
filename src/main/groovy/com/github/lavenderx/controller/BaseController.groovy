@@ -20,7 +20,7 @@ import org.springframework.web.bind.annotation.ResponseBody
 abstract class BaseController {
 
     @InitBinder
-    initBinder(WebDataBinder binder) {
+    void initBinder(WebDataBinder binder) {
         binder.registerCustomEditor(String.class, new StringTrimmerEditor(true))
     }
 

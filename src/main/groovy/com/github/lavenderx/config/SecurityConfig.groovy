@@ -1,5 +1,6 @@
 package com.github.lavenderx.config
 
+import groovy.transform.TypeChecked
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.context.annotation.ComponentScan
 import org.springframework.context.annotation.Configuration
@@ -20,13 +21,14 @@ import org.springframework.security.core.userdetails.UserDetailsService
 @EnableWebSecurity
 @EnableGlobalMethodSecurity(prePostEnabled = true, securedEnabled = true)
 @Profile(['dev', 'prod'])
+@TypeChecked
 class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Autowired
-    private UserDetailsService userDetailsService
+    UserDetailsService userDetailsService
 
     @Autowired
-    public void configureGlobal(AuthenticationManagerBuilder authenticationManagerBuilder)
+    void configureGlobal(AuthenticationManagerBuilder authenticationManagerBuilder)
             throws Exception {
         authenticationManagerBuilder.userDetailsService(userDetailsService)
     }

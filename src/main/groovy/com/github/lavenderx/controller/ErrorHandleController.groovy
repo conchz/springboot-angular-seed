@@ -18,7 +18,7 @@ class ErrorHandleController implements ErrorController {
     @RequestMapping(path = '/error')
     @ResponseBody
     @ResponseStatus
-    public ModelAndView error() {
+    ModelAndView error() {
         new ModelAndView('forward:/static/views/500.html')
     }
 

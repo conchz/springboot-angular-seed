@@ -35,8 +35,8 @@ import org.springframework.context.annotation.Scope
 @TypeChecked
 class RabbitmqConfig implements BeanFactoryPostProcessor {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(RabbitmqConfig.class)
-    private static final String SCAN_PACKAGE = 'com.github.lavenderx.common'
+    static final Logger LOGGER = LoggerFactory.getLogger(RabbitmqConfig.class)
+    static final String SCAN_PACKAGE = 'com.github.lavenderx.common'
 
     String host, vhost, exchange, username, password, routingKey, queue
     int port
@@ -68,7 +68,7 @@ class RabbitmqConfig implements BeanFactoryPostProcessor {
 
     @Bean
     @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
-    public RabbitTemplate rabbitTemplate() {
+    RabbitTemplate rabbitTemplate() {
         RabbitTemplate template = new RabbitTemplate(connectionFactory())
         template.setExchange(exchange)
         template.setReplyTimeout(replyTimeout)
@@ -88,7 +88,7 @@ class RabbitmqConfig implements BeanFactoryPostProcessor {
      */
     @Bean
     DirectExchange exchange() {
-        return new DirectExchange(exchange)
+        new DirectExchange(exchange)
     }
 
     @Bean

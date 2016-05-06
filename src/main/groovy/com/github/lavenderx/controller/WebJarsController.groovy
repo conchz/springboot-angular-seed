@@ -19,9 +19,9 @@ import javax.servlet.http.HttpServletRequest
 @TypeChecked
 class WebJarsController {
 
-    private static String webJarMvcPrefix = '/lib/%s/'
+    static String webJarMvcPrefix = '/lib/%s/'
 
-    private final WebJarAssetLocator assetsLocator = new WebJarAssetLocator()
+    final WebJarAssetLocator assetsLocator = new WebJarAssetLocator()
 
     /**
      * Request for loading webjar.
@@ -31,7 +31,7 @@ class WebJarsController {
      * @return webjar resource
      */
     @RequestMapping(path = '/lib/{webjar}/**')
-    public ResponseEntity<Object> locateWebjarAssets(
+    ResponseEntity<Object> locateWebjarAssets(
             @PathVariable String webjar,
             HttpServletRequest request) {
         try {
