@@ -16,10 +16,9 @@ class ApplicationBoot {
 
     static final String PROFILE = 'spring.profiles.active'
 
-    static main(String[] args) {
-        if (StringUtils.isEmpty(System.getProperty(PROFILE))) {
+    static void main(String[] args) {
+        if (StringUtils.isEmpty(System.getProperty(PROFILE)))
             System.setProperty(PROFILE, 'prod')
-        }
 
         SpringApplication.run(ApplicationBoot.class, args)
     }

@@ -1,8 +1,7 @@
 package com.github.lavenderx.mq
 
 import groovy.transform.TypeChecked
-import org.slf4j.Logger
-import org.slf4j.LoggerFactory
+import groovy.util.logging.Slf4j
 import org.springframework.amqp.rabbit.core.RabbitTemplate
 import org.springframework.amqp.rabbit.support.CorrelationData
 import org.springframework.beans.factory.annotation.Autowired
@@ -13,18 +12,17 @@ import org.springframework.stereotype.Component
  * Created by lavenderx on 2016-05-05.
  */
 @Component
+@Slf4j
 @TypeChecked
 class Producer implements RabbitTemplate.ConfirmCallback {
-
-    static final Logger LOGGER = LoggerFactory.getLogger(Producer.class)
-
-    RabbitTemplate rabbitTemplate
 
     @Value('${amqp.exchange}')
     String exchange
 
     @Value('${amqp.routingKey}')
     String routingKey
+
+    RabbitTemplate rabbitTemplate
 
     @Autowired
     void setRabbitTemplate(RabbitTemplate rabbitTemplate) {
@@ -34,11 +32,11 @@ class Producer implements RabbitTemplate.ConfirmCallback {
 
     @Override
     void confirm(CorrelationData correlationData, boolean ack, String cause) {
-        LOGGER.info('回调ID: ' + correlationData)
+        log.info('回调ID: ' + correlationData)
         if (ack) {
-            LOGGER.info('消息成功消费')
+            log.info('消息成功消费')
         } else {
-            LOGGER.info('消息消费失败: {}', cause)
+            log.info('消息消费失败: {}', cause)
         }
     }
 

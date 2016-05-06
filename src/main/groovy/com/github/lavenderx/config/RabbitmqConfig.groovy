@@ -3,9 +3,8 @@ package com.github.lavenderx.config
 import com.github.lavenderx.annotation.AmqpRpcService
 import com.google.common.base.CaseFormat
 import groovy.transform.TypeChecked
+import groovy.util.logging.Slf4j
 import org.reflections.Reflections
-import org.slf4j.Logger
-import org.slf4j.LoggerFactory
 import org.springframework.amqp.core.Binding
 import org.springframework.amqp.core.BindingBuilder
 import org.springframework.amqp.core.DirectExchange
@@ -32,10 +31,10 @@ import org.springframework.context.annotation.Scope
  */
 @ComponentScan('com.github.lavenderx.mq')
 @Configuration
+@Slf4j
 @TypeChecked
 class RabbitmqConfig implements BeanFactoryPostProcessor {
 
-    static final Logger LOGGER = LoggerFactory.getLogger(RabbitmqConfig.class)
     static final String SCAN_PACKAGE = 'com.github.lavenderx.common'
 
     String host, vhost, exchange, username, password, routingKey, queue
@@ -122,27 +121,27 @@ class RabbitmqConfig implements BeanFactoryPostProcessor {
     void postProcessBeanFactory(ConfigurableListableBeanFactory beanFactory)
             throws BeansException {
         try {
-            LOGGER.info('Initialize RabbitMQ host={}, vhost={}, exchange={}', host, vhost, exchange)
-            LOGGER.info('Initialize RabbitMQ RPC client stubs')
+            log.info('Initialize RabbitMQ host={}, vhost={}, exchange={}', host, vhost, exchange)
+            log.info('Initialize RabbitMQ RPC client stubs')
 
             for (Class<?> clazz :
                     new Reflections(SCAN_PACKAGE).getTypesAnnotatedWith(AmqpRpcService.class)) {
                 final String rpcServiceName = clazz.getSimpleName()
-                LOGGER.info('Processing amqp rpc service annotation {}', rpcServiceName)
+                log.info('Processing amqp rpc service annotation {}', rpcServiceName)
 
                 // Register rpc stub
                 final String rpcClientStub = CaseFormat.UPPER_CAMEL.to(CaseFormat.LOWER_CAMEL,
                         clazz.getSimpleName())
 
-                LOGGER.info('Registering rpc stub {}', rpcClientStub)
+                log.info('Registering rpc stub {}', rpcClientStub)
                 AmqpProxyFactoryBean rpcClient = createAmqpProxyFactoryBean(clazz)
                 beanFactory.registerSingleton(rpcClientStub, clazz.cast(rpcClient.getObject()))
                 beanFactory.initializeBean(clazz.cast(rpcClient.getObject()), rpcClientStub)
 
-                LOGGER.info('Complete registering rpc service {}', rpcServiceName)
+                log.info('Complete registering rpc service {}', rpcServiceName)
             }
 
-            LOGGER.info('Complete initializing RabbitMQ')
+            log.info('Complete initializing RabbitMQ')
         } catch (Exception ex) {
             throw new BeanInitializationException('Unable to configure AMQP Bean')
         }

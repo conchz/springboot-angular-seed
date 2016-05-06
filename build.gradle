@@ -14,7 +14,6 @@ buildscript {
 
 apply plugin: 'idea'
 apply plugin: 'groovy'
-apply plugin: 'checkstyle'
 apply plugin: 'spring-boot'
 apply plugin: 'application'
 apply plugin: 'com.bmuschko.docker-java-application'
@@ -44,8 +43,6 @@ sourceSets {
 }
 
 ext {
-    springbootVersion = '1.3.3.RELEASE'
-
     appVersion = version.toString().replaceAll("-(?i)SNAPSHOT", "")
     serverPort = 'server.port'
 
@@ -58,12 +55,6 @@ ext {
             serverPort = it.value
         }
     }
-}
-
-checkstyle {
-    toolVersion = '6.17'
-    ignoreFailures = true
-    configFile = file("${rootDir}/google_checks.xml")
 }
 
 bootRun {
@@ -95,14 +86,15 @@ dependencies {
     compile 'com.google.guava:guava:19.0'
     compile 'org.codehaus.groovy:groovy-all:2.4.6'
     compile 'org.reflections:reflections:0.9.10'
-    compile("org.springframework.boot:spring-boot-starter-web:$springbootVersion") {
+    compile('org.springframework.boot:spring-boot-starter-web') {
         exclude group: 'org.springframework.boot', module: 'spring-boot-starter-tomcat'
     }
-    compile "org.springframework.boot:spring-boot-starter-undertow:$springbootVersion"
-    compile "org.springframework.boot:spring-boot-starter-security:$springbootVersion"
-    compile "org.springframework.boot:spring-boot-starter-mustache:$springbootVersion"
-    compile "org.springframework.boot:spring-boot-starter-amqp:$springbootVersion"
-    compile "org.springframework.boot:spring-boot-devtools:$springbootVersion"
+    compile 'org.springframework.boot:spring-boot-starter-undertow'
+    compile 'org.springframework.boot:spring-boot-starter-security'
+    compile 'org.springframework.boot:spring-boot-starter-mustache'
+    compile 'org.springframework.boot:spring-boot-starter-amqp'
+    compile 'org.springframework.boot:spring-boot-devtools'
+    compile 'org.springframework.data:spring-data-mongodb'
 
     // Webjars dependencies
     compile 'org.webjars:webjars-locator:0.31'
@@ -116,7 +108,7 @@ dependencies {
     }
     compile 'org.webjars:ui-grid:3.1.1'
 
-    testCompile "org.springframework.boot:spring-boot-starter-test:$springbootVersion"
+    testCompile 'org.springframework.boot:spring-boot-starter-test'
 }
 
 

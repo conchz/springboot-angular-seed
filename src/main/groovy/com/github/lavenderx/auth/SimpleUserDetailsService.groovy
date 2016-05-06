@@ -2,6 +2,7 @@ package com.github.lavenderx.auth
 
 import com.github.lavenderx.model.entity.UserAuthentication
 import groovy.transform.TypeChecked
+import groovy.util.logging.Slf4j
 import org.springframework.security.core.GrantedAuthority
 import org.springframework.security.core.authority.SimpleGrantedAuthority
 import org.springframework.security.core.userdetails.User
@@ -14,6 +15,7 @@ import org.springframework.stereotype.Service
  * Created by lavenderx on 2016-05-05.
  */
 @Service
+@Slf4j
 class SimpleUserDetailsService implements UserDetailsService {
 
     @Override
@@ -21,14 +23,15 @@ class SimpleUserDetailsService implements UserDetailsService {
     UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         UserAuthentication user = new UserAuthentication()
         if (user != null) {
-            List<GrantedAuthority> authorities = new LinkedList<>()
-            user.getRoleList().each { role ->
+            List<GrantedAuthority> authorities = []
+            user.roleList.each { role ->
                 authorities.add(new SimpleGrantedAuthority(role))
             }
 
-            new User(user.getUsername(), user.getPassword(), authorities)
+            new User(user.username, user.password, authorities)
         }
 
-        throw new UsernameNotFoundException('Username ' + username + ' is not authorized.')
+        log.error('User `{}` is not authorized', username)
+        throw new UsernameNotFoundException('User ' + username + ' is not authorized')
     }
 }

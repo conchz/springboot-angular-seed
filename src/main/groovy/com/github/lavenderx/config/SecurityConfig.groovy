@@ -35,24 +35,14 @@ class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-        auth.inMemoryAuthentication()
-                .withUser('lavenderx')
-                .password('test1234')
-                .roles('USER')
+        auth.inMemoryAuthentication().withUser('lavenderx').password('test1234').roles('USER')
     }
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-        http.authorizeRequests()
-                .anyRequest()
-                .fullyAuthenticated()
-                .and()
-                .httpBasic()
-                .and()
-                .sessionManagement()
-                .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-                .and()
-                .csrf()
-                .disable()
+        http.authorizeRequests().anyRequest().fullyAuthenticated()
+        http.httpBasic()
+        http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+        http.csrf().disable()
     }
 }

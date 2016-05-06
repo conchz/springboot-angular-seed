@@ -1,8 +1,7 @@
 package com.github.lavenderx.config
 
 import groovy.transform.TypeChecked
-import org.slf4j.Logger
-import org.slf4j.LoggerFactory
+import groovy.util.logging.Slf4j
 import org.springframework.boot.CommandLineRunner
 import org.springframework.core.annotation.Order
 import org.springframework.stereotype.Component
@@ -12,13 +11,12 @@ import org.springframework.stereotype.Component
  */
 @Order(1)
 @Component
+@Slf4j
 @TypeChecked
 class SimpleStartupRunner implements CommandLineRunner {
 
-    static final Logger LOGGER = LoggerFactory.getLogger(SimpleStartupRunner.class)
-
     @Override
     void run(String... strings) throws Exception {
-        LOGGER.info('>>>>>>>>>>>>>>>> Spring Boot extra startup is running <<<<<<<<<<<<<<<<')
+        log.info('>>>>>>>>>>>>>>>> Spring Boot extra startup is running <<<<<<<<<<<<<<<<')
     }
 }
