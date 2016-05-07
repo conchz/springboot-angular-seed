@@ -1,6 +1,5 @@
-springboot-angular-seed
-=======================
-[TOC]
+springboot-angular-seed [![Build Status](https://travis-ci.org/lavenderx/springboot-angular-seed.svg?branch=master)](https://travis-ci.org/lavenderx/springboot-angular-seed)
+=============================================================================================================================================================================
 
 Introduction
 ------------
