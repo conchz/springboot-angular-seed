@@ -70,7 +70,7 @@ bootRun {
 
 docker {
     javaApplication {
-        baseImage = 'dockerfile/java:openjdk-8-jre'
+        baseImage = 'dockerfile/java:8-jre-alpine'
         maintainer = 'Zongzhi Bai "dolphineor@gmail.com"'
         port = "$serverPort".toInteger()
         tag = "$project.name:$appVersion"
@@ -121,6 +121,7 @@ task wrapper(type: Wrapper) {
 // Package sources into a executable binary distribution zip file
 
 applicationDefaultJvmArgs = [
+        '-server',
         '-Xms1g',
         '-Xmx1g',
         '-Dfile.encoding=UTF-8'
