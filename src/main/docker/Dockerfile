@@ -1,3 +1,4 @@
+# http://www.cnblogs.com/lienhua34/p/5170335.html
 FROM java:8-jre-alpine
 
 MAINTAINER Zongzhi Bai <dolphineor@gmail.com>

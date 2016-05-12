@@ -11,7 +11,7 @@ import org.springframework.stereotype.Component
 /**
  * Created by lavenderx on 2016-05-05.
  */
-//@Component
+@Component
 @Slf4j
 @TypeChecked
 class Producer implements RabbitTemplate.ConfirmCallback {
