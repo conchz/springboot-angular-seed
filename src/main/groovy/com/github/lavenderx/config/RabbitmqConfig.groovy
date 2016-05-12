@@ -25,15 +25,13 @@ import org.springframework.context.annotation.Configuration
 import org.springframework.context.annotation.Scope
 
 /**
- * <a href='http://www.ithao123.cn/content-10535193.html'></a>
- * </p>
  * Created by lavenderx on 2016-05-05.
  */
-@ComponentScan('com.github.lavenderx.mq')
-@Configuration
+//@ComponentScan('com.github.lavenderx.mq')
+//@Configuration
 @Slf4j
 @TypeChecked
-class RabbitmqConfig implements BeanFactoryPostProcessor {
+class RabbitmqConfig /*implements BeanFactoryPostProcessor*/ {
 
     static final String SCAN_PACKAGE = 'com.github.lavenderx.common'
 
@@ -65,15 +63,15 @@ class RabbitmqConfig implements BeanFactoryPostProcessor {
         }
     }
 
-    @Bean
-    @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
-    RabbitTemplate rabbitTemplate() {
-        RabbitTemplate template = new RabbitTemplate(connectionFactory())
-        template.setExchange(exchange)
-        template.setReplyTimeout(replyTimeout)
-
-        template
-    }
+//    @Bean
+//    @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
+//    RabbitTemplate rabbitTemplate() {
+//        RabbitTemplate template = new RabbitTemplate(connectionFactory())
+//        template.setExchange(exchange)
+//        template.setReplyTimeout(replyTimeout)
+//
+//        template
+//    }
 
     /**
      * 针对消费者配置
@@ -85,75 +83,75 @@ class RabbitmqConfig implements BeanFactoryPostProcessor {
      * DirectExchange: 按照routingkey分发到指定队列
      * TopicExchange: 多关键字匹配
      */
-    @Bean
-    DirectExchange exchange() {
-        new DirectExchange(exchange)
-    }
-
-    @Bean
-    Queue queue() {
-        new Queue(queue, true)    // 队列持久
-
-    }
-
-    @Bean
-    Binding binding() {
-        BindingBuilder.bind(queue()).to(exchange()).with(routingKey)
-    }
-
-    @Bean
-    RabbitAdmin rabbitAdmin() {
-        new RabbitAdmin(connectionFactory())
-    }
-
-    @Bean
-    ConnectionFactory connectionFactory() {
-        CachingConnectionFactory connectionFactory = new CachingConnectionFactory(host, port)
-        connectionFactory.setUsername(username)
-        connectionFactory.setPassword(password)
-        connectionFactory.setVirtualHost(vhost)
-        connectionFactory.setPublisherConfirms(true)
-
-        connectionFactory
-    }
-
-    @Override
-    void postProcessBeanFactory(ConfigurableListableBeanFactory beanFactory)
-            throws BeansException {
-        try {
-            log.info('Initialize RabbitMQ host={}, vhost={}, exchange={}', host, vhost, exchange)
-            log.info('Initialize RabbitMQ RPC client stubs')
-
-            for (Class<?> clazz :
-                    new Reflections(SCAN_PACKAGE).getTypesAnnotatedWith(AmqpRpcService.class)) {
-                final String rpcServiceName = clazz.getSimpleName()
-                log.info('Processing amqp rpc service annotation {}', rpcServiceName)
-
-                // Register rpc stub
-                final String rpcClientStub = CaseFormat.UPPER_CAMEL.to(CaseFormat.LOWER_CAMEL,
-                        clazz.getSimpleName())
-
-                log.info('Registering rpc stub {}', rpcClientStub)
-                AmqpProxyFactoryBean rpcClient = createAmqpProxyFactoryBean(clazz)
-                beanFactory.registerSingleton(rpcClientStub, clazz.cast(rpcClient.getObject()))
-                beanFactory.initializeBean(clazz.cast(rpcClient.getObject()), rpcClientStub)
-
-                log.info('Complete registering rpc service {}', rpcServiceName)
-            }
-
-            log.info('Complete initializing RabbitMQ')
-        } catch (Exception ex) {
-            throw new BeanInitializationException('Unable to configure AMQP Bean')
-        }
-    }
-
-    private AmqpProxyFactoryBean createAmqpProxyFactoryBean(Class<?> serviceInterface) {
-        AmqpProxyFactoryBean amqpProxyFactoryBean = new AmqpProxyFactoryBean()
-        amqpProxyFactoryBean.setRoutingKey(serviceInterface.getName())
-        amqpProxyFactoryBean.setServiceInterface(serviceInterface)
-        amqpProxyFactoryBean.setAmqpTemplate(rabbitTemplate())
-        amqpProxyFactoryBean.afterPropertiesSet()
-
-        amqpProxyFactoryBean
-    }
+//    @Bean
+//    DirectExchange exchange() {
+//        new DirectExchange(exchange)
+//    }
+//
+//    @Bean
+//    Queue queue() {
+//        new Queue(queue, true)    // 队列持久
+//
+//    }
+//
+//    @Bean
+//    Binding binding() {
+//        BindingBuilder.bind(queue()).to(exchange()).with(routingKey)
+//    }
+//
+//    @Bean
+//    RabbitAdmin rabbitAdmin() {
+//        new RabbitAdmin(connectionFactory())
+//    }
+//
+//    @Bean
+//    ConnectionFactory connectionFactory() {
+//        CachingConnectionFactory connectionFactory = new CachingConnectionFactory(host, port)
+//        connectionFactory.setUsername(username)
+//        connectionFactory.setPassword(password)
+//        connectionFactory.setVirtualHost(vhost)
+//        connectionFactory.setPublisherConfirms(true)
+//
+//        connectionFactory
+//    }
+//
+//    @Override
+//    void postProcessBeanFactory(ConfigurableListableBeanFactory beanFactory)
+//            throws BeansException {
+//        try {
+//            log.info('Initialize RabbitMQ host={}, vhost={}, exchange={}', host, vhost, exchange)
+//            log.info('Initialize RabbitMQ RPC client stubs')
+//
+//            for (Class<?> clazz :
+//                    new Reflections(SCAN_PACKAGE).getTypesAnnotatedWith(AmqpRpcService.class)) {
+//                final String rpcServiceName = clazz.getSimpleName()
+//                log.info('Processing amqp rpc service annotation {}', rpcServiceName)
+//
+//                // Register rpc stub
+//                final String rpcClientStub = CaseFormat.UPPER_CAMEL.to(CaseFormat.LOWER_CAMEL,
+//                        clazz.getSimpleName())
+//
+//                log.info('Registering rpc stub {}', rpcClientStub)
+//                AmqpProxyFactoryBean rpcClient = createAmqpProxyFactoryBean(clazz)
+//                beanFactory.registerSingleton(rpcClientStub, clazz.cast(rpcClient.getObject()))
+//                beanFactory.initializeBean(clazz.cast(rpcClient.getObject()), rpcClientStub)
+//
+//                log.info('Complete registering rpc service {}', rpcServiceName)
+//            }
+//
+//            log.info('Complete initializing RabbitMQ')
+//        } catch (Exception ex) {
+//            throw new BeanInitializationException('Unable to configure AMQP Bean')
+//        }
+//    }
+//
+//    private AmqpProxyFactoryBean createAmqpProxyFactoryBean(Class<?> serviceInterface) {
+//        AmqpProxyFactoryBean amqpProxyFactoryBean = new AmqpProxyFactoryBean()
+//        amqpProxyFactoryBean.setRoutingKey(serviceInterface.getName())
+//        amqpProxyFactoryBean.setServiceInterface(serviceInterface)
+//        amqpProxyFactoryBean.setAmqpTemplate(rabbitTemplate())
+//        amqpProxyFactoryBean.afterPropertiesSet()
+//
+//        amqpProxyFactoryBean
+//    }
 }
