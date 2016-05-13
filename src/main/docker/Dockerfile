@@ -1,10 +1,10 @@
-# http://www.cnblogs.com/lienhua34/p/5170335.html
-FROM java:8-jre-alpine
+FROM java:8-jre
 
 MAINTAINER Zongzhi Bai <dolphineor@gmail.com>
 
-ADD springboot-angular-seed.jar /opt/docker/
+COPY startup /
+COPY springboot-angular-seed.jar /opt
 
-WORKDIR /opt/docker
+RUN chmod +x /startup
 
-CMD ["java", "-server", "-Xms1g", "-Xmx1g", "-Dfile.encoding=UTF-8", "-jar", "springboot-angular-seed.jar"]
+ENTRYPOINT ["/startup"]

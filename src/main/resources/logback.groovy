@@ -15,7 +15,7 @@ import java.nio.charset.Charset
 
 import static ch.qos.logback.classic.Level.INFO
 
-def APP_LOG_HOME = System.getProperty("user.home") + "/logs/springboot-angular-seed"
+def APP_LOG_HOME = "./logs/"
 
 scan("60 seconds")
 appender("STDOUT", ConsoleAppender) {
