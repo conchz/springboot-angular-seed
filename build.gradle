@@ -22,11 +22,18 @@ apply plugin: 'spring-boot'
 apply plugin: 'us.kirchmeier.capsule'
 apply plugin: 'com.bmuschko.docker-remote-api'
 
-sourceCompatibility = 1.8
-targetCompatibility = 1.8
+def jdkVersion = '1.8'
+def sourceEncoding = 'UTF-8'
+def appVersion = version.toString().replaceAll("-(?i)SNAPSHOT", "")
+def serverPort = 'server.port'
 
-compileJava.options.encoding = 'UTF-8'
-compileTestJava.options.encoding = 'UTF-8'
+sourceCompatibility = "$jdkVersion"
+targetCompatibility = "$jdkVersion"
+
+compileJava.options.encoding = "$sourceEncoding"
+compileGroovy.options.encoding = "$sourceEncoding"
+compileTestJava.options.encoding = "$sourceEncoding"
+compileTestGroovy.options.encoding = "$sourceEncoding"
 
 configurations {
     all*.exclude group: 'commons-logging', module: 'commons-logging'
@@ -46,9 +53,6 @@ sourceSets {
 
 ext {
     springbootVersion = '1.3.5.RELEASE'
-
-    appVersion = version.toString().replaceAll("-(?i)SNAPSHOT", "")
-    serverPort = 'server.port'
 
     def props = new Properties()
     file('src/main/resources/common-config.properties').withInputStream {
@@ -111,6 +115,10 @@ dependencies {
 }
 
 
+import com.bmuschko.gradle.docker.tasks.image.DockerBuildImage
+import com.bmuschko.gradle.docker.tasks.image.Dockerfile
+import us.kirchmeier.capsule.task.FatCapsule
+
 task wrapper(type: Wrapper) {
     gradleVersion = '2.13'
 }
@@ -126,7 +134,7 @@ task copyLicense {
 }
 
 jar.from(copyLicense) {
-    into ""
+    into 'META-INF'
 }
 
 task fatCapsule(type: FatCapsule) {
@@ -136,7 +144,12 @@ task fatCapsule(type: FatCapsule) {
 
     capsuleManifest {
         args = ['--very-fancy']
-        minJavaVersion = '1.8'
+        applicationName = project.name
+        applicationId = UUID.randomUUID().toString().replaceAll("-", "")
+        applicationVersion = "$appVersion"
+        minJavaVersion = "$jdkVersion"
+        javaVersion = "$jdkVersion"
+        jdkRequired = true
     }
 }
 
@@ -148,16 +161,11 @@ task copyJar(type: Copy) {
             fileName.replace("-${project.version}-capsule", "")
         }
     }
-    from('src/main/docker') {
-        exclude '**/Dockerfile'
-    }
+    from('src/main/docker')
     into 'build/docker'
 
     includeEmptyDirs = false
 }
-
-import com.bmuschko.gradle.docker.tasks.image.DockerBuildImage
-import com.bmuschko.gradle.docker.tasks.image.Dockerfile
 
 task createDockerfile(type: Dockerfile) {
     dependsOn copyJar
@@ -166,9 +174,10 @@ task createDockerfile(type: Dockerfile) {
 
     from 'java:8-jre'
     maintainer 'Zongzhi Bai "dolphineor@gmail.com"'
-    copyFile 'startup', '/'
     copyFile 'springboot-angular-seed.jar', '/opt'
+    copyFile 'startup', '/'
     runCommand 'chmod +x /startup'
+    exposePort "$serverPort".toInteger()
     entryPoint '/startup'
 }
 
