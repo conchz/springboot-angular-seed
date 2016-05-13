@@ -20,7 +20,7 @@ apply plugin: 'idea'
 apply plugin: 'groovy'
 apply plugin: 'spring-boot'
 apply plugin: 'us.kirchmeier.capsule'
-apply plugin: 'com.bmuschko.docker-java-application'
+apply plugin: 'com.bmuschko.docker-remote-api'
 
 sourceCompatibility = 1.8
 targetCompatibility = 1.8
@@ -71,12 +71,7 @@ bootRun {
 }
 
 docker {
-    javaApplication {
-        baseImage = 'dockerfile/java:8-jre-alpine'
-        maintainer = 'Zongzhi Bai "dolphineor@gmail.com"'
-        port = "$serverPort".toInteger()
-        tag = "lavenderx/$project.name:$appVersion"
-    }
+    url = 'http://127.0.0.1:2375'
 }
 
 repositories {
@@ -146,17 +141,42 @@ task fatCapsule(type: FatCapsule) {
 }
 
 task copyJar(type: Copy) {
-    dependsOn 'fatCapsule'
+    dependsOn fatCapsule
 
     from("build/libs/${project.name}-${project.version}-capsule.jar") {
         rename { String fileName ->
             fileName.replace("-${project.version}-capsule", "")
         }
     }
-    from 'src/main/docker'
+    from('src/main/docker') {
+        exclude '**/Dockerfile'
+    }
     into 'build/docker'
 
     includeEmptyDirs = false
+}
+
+import com.bmuschko.gradle.docker.tasks.image.DockerBuildImage
+import com.bmuschko.gradle.docker.tasks.image.Dockerfile
+
+task createDockerfile(type: Dockerfile) {
+    dependsOn copyJar
+
+    destFile = project.file('build/docker/Dockerfile')
+
+    from 'java:8-jre'
+    maintainer 'Zongzhi Bai "dolphineor@gmail.com"'
+    copyFile 'startup', '/'
+    copyFile 'springboot-angular-seed.jar', '/opt'
+    runCommand 'chmod +x /startup'
+    entryPoint '/startup'
+}
+
+task buildImage(type: DockerBuildImage) {
+    dependsOn createDockerfile
+
+    inputDir = createDockerfile.destFile.parentFile
+    tag = "lavenderx/$project.name:$appVersion"
 }
 
 build.dependsOn copyJar
