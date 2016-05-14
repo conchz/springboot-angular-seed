@@ -5,11 +5,8 @@ Introduction
 ------------
 
 This project is a web scaffold about **Spring Boot** and **AngularJS**. 
-Considering **Groovy** is simpler than **Java**, we used it as program language. 
-Of course, you can also use **Java** if you like. In this scaffold, we'll 
-show you how to package sources into a executable binary distribution zip 
-file, and how to deploy our application by **Docker**. Basing on it, you 
-can quick use it to build your individual application.
+In this scaffold, we'll show you how to deploy our application by **Docker**. 
+Basing on it, you can quick use it to build your individual application.
 
 Usage
 -----
