@@ -17,7 +17,8 @@ buildscript {
 }
 
 apply plugin: 'idea'
-apply plugin: 'groovy'
+apply plugin: 'java'
+apply plugin: 'checkstyle'
 apply plugin: 'spring-boot'
 apply plugin: 'us.kirchmeier.capsule'
 apply plugin: 'com.bmuschko.docker-remote-api'
@@ -49,6 +50,12 @@ ext {
             serverPort = it.value
         }
     }
+}
+
+checkstyle {
+    toolVersion = '6.18'
+    ignoreFailures = true
+    configFile = file("$rootDir/google_checks.xml")
 }
 
 bootRun {
