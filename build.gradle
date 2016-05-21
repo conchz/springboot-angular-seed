@@ -71,7 +71,7 @@ jar {
 }
 
 docker {
-    url = 'http://127.0.0.1:2375'
+    url = 'http://server01:2375'
 }
 
 repositories {

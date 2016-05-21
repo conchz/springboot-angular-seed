@@ -25,7 +25,7 @@ public class WebJarsController {
     /**
      * Request for loading webjar.
      *
-     * @param webjar  webjar"s name
+     * @param webjar  webjar's name
      * @param request {@link HttpServletRequest}
      * @return webjar resource
      */
