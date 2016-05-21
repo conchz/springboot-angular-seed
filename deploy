@@ -2,7 +2,9 @@
 
 base_dir=$(pwd)
 
-APPLICATION_VERSION=0.1.0
+APPLICATION_VERSION=`grep -e "version '" build.gradle \
+    | awk -F '\047' '{print $2}' \
+    | awk 'sub(/-(SNAPSHOT|snapshot)/, "")'`
 IMAGE_NAME=lavenderx/springboot-angular-seed:${APPLICATION_VERSION}
 CONTAINER_NAME=springboot-angular-seed
 
@@ -10,7 +12,7 @@ CONTAINER_NAME=springboot-angular-seed
 running=$(docker inspect --format="{{ .State.Running }}" ${CONTAINER_NAME} 2> /dev/null)
 
 if [ $? -eq 1 ];  then
-    echo "The specific container does't exist!"
+    echo "The specific container doesn't exist!"
 else
     # Check container running status
     if [ "${running}" = "true" ];  then
