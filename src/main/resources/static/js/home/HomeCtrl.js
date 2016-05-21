@@ -46,11 +46,13 @@ define([], function () {
             var queryUrl = "" + $scope.queryString;
             $http.get(queryUrl)
                 .success(function (response, status, headers, config) {
-                    $scope.gridOptions.data = JSON.parse(response.data);
+                    $scope.gridApi.pagination.seek(1);
+                    $scope.gridOptions.data = response.data;
 
                     var totalHits = $scope.gridOptions.data.length;
                     if (totalHits == 0) {
                         $scope.blacklistHitsDesc = "没有找到符合条件的记录";
+                        $scope.gridOptions.data = [];
                     } else {
                         $scope.blacklistHitsDesc = "共搜索到" + totalHits + "条记录";
                     }
@@ -61,36 +63,39 @@ define([], function () {
         };
 
         $scope.showDetails = function (grid, row) {
-            delete row.entity._id;
-            delete row.entity.$$hashKey;
+            $http.get("/blacklist/search/" + row.entity._id)
+                .success(function (data, status, headers, config) {
+                    var content = JSON.stringify(data, null, '\t').replace(/null/g, "\"\"");
 
-            var content = JSON.stringify(row.entity, null, '\t').replace(/null/g, "\"\"");
-
-            $uibModal.open({
-                template: '<div>' +
-                '<div class="modal-header">' +
-                '<h3 class="modal-title">详细信息</h3>' +
-                '</div>' +
-                '<div class="modal-body">' +
-                '<textarea style="width: 560px; height: 270px" readonly="readonly">' +
-                content +
-                '</textarea>' +
-                '</div>' +
-                '<div class="modal-footer">' +
-                '<button class="btn btn-warning" ng-click="$close()">关闭</button>' +
-                '</div>' +
-                '</div>',
-                controller: ['$uibModalInstance', 'grid', 'row', BlacklistDetailsCtrl],
-                controllerAs: grid.appScope,
-                resolve: {
-                    grid: function () {
-                        return grid;
-                    },
-                    row: function () {
-                        return row;
-                    }
-                }
-            });
+                    $uibModal.open({
+                        template: '<div>' +
+                        '<div class="modal-header">' +
+                        '<h3 class="modal-title">详细信息</h3>' +
+                        '</div>' +
+                        '<div class="modal-body">' +
+                        '<textarea style="width: 560px; height: 270px" readonly="readonly">' +
+                        content +
+                        '</textarea>' +
+                        '</div>' +
+                        '<div class="modal-footer">' +
+                        '<button class="btn btn-warning" ng-click="$close()">关闭</button>' +
+                        '</div>' +
+                        '</div>',
+                        controller: ['$uibModalInstance', 'grid', 'row', BlacklistDetailsCtrl],
+                        controllerAs: grid.appScope,
+                        resolve: {
+                            grid: function () {
+                                return grid;
+                            },
+                            row: function () {
+                                return row;
+                            }
+                        }
+                    });
+                })
+                .error(function (err, status, headers, config) {
+                    console.log(err);
+                });
         }
     };
     HomeCtrl.$inject = ['$scope', '$rootScope', '$http', '$uibModal', '$location', 'helper'];

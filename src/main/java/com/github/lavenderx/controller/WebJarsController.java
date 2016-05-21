@@ -5,6 +5,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.HandlerMapping;
 import org.webjars.WebJarAssetLocator;
@@ -28,7 +29,7 @@ public class WebJarsController {
      * @param request {@link HttpServletRequest}
      * @return webjar resource
      */
-    @RequestMapping(path = "/lib/{webjar}/**")
+    @RequestMapping(path = "/lib/{webjar}/**", method = RequestMethod.GET)
     public ResponseEntity<Object> locateWebjarAssets(
             @PathVariable String webjar,
             HttpServletRequest request) {

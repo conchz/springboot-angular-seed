@@ -1,8 +1,8 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
 base_dir=$(pwd)
 
-APPLICATION_VERSION=1.0
+APPLICATION_VERSION=0.1.0
 IMAGE_NAME=lavenderx/springboot-angular-seed:${APPLICATION_VERSION}
 CONTAINER_NAME=springboot-angular-seed
 

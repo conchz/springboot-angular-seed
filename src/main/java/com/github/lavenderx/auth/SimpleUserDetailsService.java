@@ -25,9 +25,7 @@ public class SimpleUserDetailsService implements UserDetailsService {
         UserAuthentication user = new UserAuthentication();
         if (user != null) {
             List<GrantedAuthority> authorities = new ArrayList<>();
-            user.getRoleList().forEach(role -> {
-                authorities.add(new SimpleGrantedAuthority(role));
-            });
+            user.getRoleList().forEach(role -> authorities.add(new SimpleGrantedAuthority(role)));
 
             return new User(user.getUsername(), user.getPassword(), authorities);
         }

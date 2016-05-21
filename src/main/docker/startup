@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
 JAVA_OPTS="-server \
     -Dfile.encoding=UTF-8"
@@ -12,7 +12,7 @@ fi
 if [ -n "$PROFILE" ];  then
     JAVA_OPTS="$JAVA_OPTS -Dspring.profiles.active=$PROFILE"
 else
-    JAVA_OPTS="$JAVA_OPTS -Dspring.profiles.active=dev"
+    JAVA_OPTS="$JAVA_OPTS -Dspring.profiles.active=prod"
 fi
 
 

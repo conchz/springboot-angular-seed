@@ -1,7 +1,8 @@
 package com.github.lavenderx.config;
 
-import com.github.lavenderx.annotation.AmqpRpcService;
 import com.google.common.base.CaseFormat;
+
+import com.github.lavenderx.annotation.AmqpRpcService;
 import lombok.extern.slf4j.Slf4j;
 import org.reflections.Reflections;
 import org.springframework.amqp.core.Binding;
@@ -48,7 +49,7 @@ public class RabbitmqConfig implements BeanFactoryPostProcessor {
     private long replyTimeout;
 
     public RabbitmqConfig() {
-        final String rabbitmqConfigFile = System.getProperty("spring.profiles.active") + ".properties";
+        String rabbitmqConfigFile = System.getProperty("spring.profiles.active") + ".properties";
 
         try (InputStream inputStream =
                      RabbitmqConfig.class.getClassLoader().getResourceAsStream(rabbitmqConfigFile)) {
