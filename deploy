@@ -2,30 +2,31 @@
 
 base_dir=$(pwd)
 
-APPLICATION_VERSION=`grep -e "version '" build.gradle \
+imageVersion=`grep -e "version '" build.gradle \
     | awk -F '\047' '{print $2}' \
     | awk 'sub(/-(SNAPSHOT|snapshot)/, "")'`
-IMAGE_NAME=lavenderx/springboot-angular-seed:${APPLICATION_VERSION}
-CONTAINER_NAME=springboot-angular-seed
+imageName=lavenderx/springboot-angular-seed
+containerName=springboot-angular-seed
 
-# Container status
-running=$(docker inspect --format="{{ .State.Running }}" ${CONTAINER_NAME} 2> /dev/null)
+# Get container status
+running=$(docker inspect --format="{{ .State.Running }}" ${containerName} 2> /dev/null)
 
 if [ $? -eq 1 ];  then
     echo "The specific container doesn't exist!"
 else
     # Check container running status
     if [ "${running}" = "true" ];  then
-        docker stop ${CONTAINER_NAME}
+        docker stop ${containerName}
     fi
 
-    docker rm ${CONTAINER_NAME}
+    docker rm ${containerName}
 fi
 
-if [ ! -z ${IMAGE_NAME} ];  then
-    docker rmi ${IMAGE_NAME}
+imageId=$(docker images -q ${imageName}:${imageVersion} 2> /dev/null)
+if [ ! -z ${imageId} ];  then
+    docker rmi ${imageId}
 fi
 
 gradle clean buildImage
 
-docker run --name ${CONTAINER_NAME} --net host -d -e HEAP_SIZE=1g -e PROFILE=dev ${IMAGE_NAME}
+docker run --name ${containerName} --net host -d -e HEAP_SIZE=1g -e PROFILE=dev ${imageName}:${imageVersion}
