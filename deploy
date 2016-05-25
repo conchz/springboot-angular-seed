@@ -27,6 +27,6 @@ if [ ! -z ${imageId} ];  then
     docker rmi ${imageId}
 fi
 
-gradle clean buildImage
+./gradlew clean buildImage
 
 docker run --name ${containerName} --net host -d -e HEAP_SIZE=1g -e PROFILE=dev ${imageName}:${imageVersion}
