@@ -18,11 +18,10 @@ apply plugin: 'checkstyle'
 apply plugin: 'spring-boot'
 apply plugin: 'com.bmuschko.docker-remote-api'
 
-def springbootVersion = '1.3.5.RELEASE'
 def serverPort = 'server.port'
 
-sourceCompatibility = '1.8'
-targetCompatibility = '1.8'
+sourceCompatibility = JavaVersion.VERSION_1_8
+targetCompatibility = JavaVersion.VERSION_1_8
 
 compileJava.options.encoding = 'UTF-8'
 compileTestJava.options.encoding = 'UTF-8'
@@ -41,6 +40,8 @@ ext {
             serverPort = it.value
         }
     }
+
+    springbootVersion = '1.3.5.RELEASE'
 }
 
 checkstyle {
@@ -61,7 +62,7 @@ bootRun {
 jar {
     manifest {
         attributes 'Implementation-Title': 'springboot-angular-seed',
-                'Implementation-Version': version.toString().replaceAll("-(?i)SNAPSHOT", ""),
+                'Implementation-Version': project.version.toString().replaceFirst("-(?i)SNAPSHOT", ""),
                 'Main-Class': 'org.springframework.boot.loader.JarLauncher',
                 'Start-Class': 'com.github.lavenderx.ApplicationBoot'
     }
@@ -114,10 +115,6 @@ dependencies {
 import com.bmuschko.gradle.docker.tasks.image.DockerBuildImage
 import com.bmuschko.gradle.docker.tasks.image.Dockerfile
 
-task wrapper(type: Wrapper) {
-    gradleVersion = '2.13'
-}
-
 task copyDistFiles(type: Copy) {
     dependsOn build
 
@@ -150,5 +147,9 @@ task buildImage(type: DockerBuildImage) {
     dependsOn createDockerfile
 
     inputDir = createDockerfile.destFile.parentFile
-    tag = "lavenderx/$project.name:" + version.toString().replaceAll("-(?i)SNAPSHOT", "")
+    tag = "lavenderx/$project.name:" + project.version.toString().replaceFirst("-(?i)SNAPSHOT", "")
+}
+
+task wrapper(type: Wrapper) {
+    gradleVersion = '2.13'
 }
