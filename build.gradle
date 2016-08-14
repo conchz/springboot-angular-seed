@@ -7,8 +7,8 @@ buildscript {
     }
 
     dependencies {
-        classpath 'org.springframework.boot:spring-boot-gradle-plugin:1.3.5.RELEASE'
-        classpath 'com.bmuschko:gradle-docker-plugin:2.6.8'
+        classpath 'org.springframework.boot:spring-boot-gradle-plugin:1.4.0.RELEASE'
+        classpath 'com.bmuschko:gradle-docker-plugin:3.0.1'
     }
 }
 
@@ -23,8 +23,7 @@ def serverPort = 'server.port'
 sourceCompatibility = JavaVersion.VERSION_1_8
 targetCompatibility = JavaVersion.VERSION_1_8
 
-compileJava.options.encoding = 'UTF-8'
-compileTestJava.options.encoding = 'UTF-8'
+[compileJava, compileTestJava]*.options*.encoding = 'UTF-8'
 
 configurations {
     all*.exclude group: 'commons-logging', module: 'commons-logging'
@@ -41,11 +40,11 @@ ext {
         }
     }
 
-    springbootVersion = '1.3.5.RELEASE'
+    springbootVersion = '1.4.0.RELEASE'
 }
 
 checkstyle {
-    toolVersion = '6.18'
+    toolVersion = '7.1'
     ignoreFailures = true
     configFile = file("$rootDir/google_checks.xml")
 }
@@ -67,12 +66,11 @@ jar {
                 'Start-Class': 'com.github.lavenderx.ApplicationBoot'
     }
 
-    encoding = 'UTF-8'
     zip64 = true
 }
 
 docker {
-    url = 'http://server01:2375'
+    url = 'http://localhost:2375'
 }
 
 repositories {
@@ -84,7 +82,7 @@ repositories {
 dependencies {
     compile 'ch.qos.logback:logback-classic:1.1.7'
     compile 'com.google.guava:guava:19.0'
-    compile 'org.projectlombok:lombok:1.16.8'
+    compile 'org.projectlombok:lombok:1.16.10'
     compile 'org.reflections:reflections:0.9.10'
 
     compile("org.springframework.boot:spring-boot-starter-web:$springbootVersion") {
@@ -97,13 +95,13 @@ dependencies {
     compile "org.springframework.boot:spring-boot-devtools:$springbootVersion"
 
     // Webjars dependencies
-    compile 'org.webjars:webjars-locator:0.31'
+    compile 'org.webjars:webjars-locator:0.32'
     compile 'org.webjars:requirejs:2.2.0'
-    compile 'org.webjars:jquery:2.2.3' // for bootstrap
-    compile('org.webjars:angularjs:1.5.5') {
+    compile 'org.webjars:jquery:3.1.0' // for bootstrap
+    compile('org.webjars:angularjs:1.5.7') {
         exclude group: 'org.webjars', module: 'jquery'
     }
-    compile('org.webjars:angular-ui-bootstrap:1.3.2') {
+    compile('org.webjars:angular-ui-bootstrap:1.3.3') {
         exclude group: 'org.webjars', module: 'jquery'
     }
     compile 'org.webjars:ui-grid:3.1.1'
